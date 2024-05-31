@@ -10,6 +10,12 @@ import "../globals.css";
 import getCookie from "@/components/getCoockie";
 
 import { AppProvider } from "@/context/context";
+import { ResponseProvider } from "@/context/responsecontext";
+
+
+
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,17 +25,20 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const cookieStore = getCookie("c_user")?.value;
 
   return (
     <html lang="en">
       <body className="flex bg-deepdark w-[100%] relative">
         <AppProvider>
-          <Sidebar user={cookieStore} />
+          <ResponseProvider>
 
-          <Chat userId={cookieStore} />
+          
+          <Sidebar  />
+
+          <Chat />
 
           {children}
+          </ResponseProvider>
         </AppProvider>
       </body>
     </html>

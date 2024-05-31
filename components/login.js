@@ -9,12 +9,15 @@ import toastService from '@/services/toastService';
 
 import action from '@/app/actions'
 import { useRouter } from 'next/navigation'
-
+import DisableModal from '@/components/disableModal'
 
 
 
 
 const Login = () => {
+
+    const [disabled, setDisabled] = useState(false)
+    const [disabledData, setDisabledData] = useState({})
 
     const router = useRouter()
 
@@ -24,7 +27,7 @@ const Login = () => {
 
    const handleSubmit = async (formData) =>{
 
-    const email = formData.get('email')
+    const identifier = formData.get('identifier')
     const password = formData.get('password')
 
 //   const result = await getLoginDetails(email, password)
@@ -34,21 +37,26 @@ const Login = () => {
 
     
          const result = await toastService.promise(
-            getLoginDetails(email, password)
+            getLoginDetails(identifier, password)
         )
         // const result = await getLoginDetails(email, password)
 
         
-if(result){
-
+if(result.status === 401){
+    toastService.error(result.msg)
 // Promise.all([ action('c_user', result.id) ,  action('token', result.token)])
 
-     await action('c_user', result.id)
-   await action('token', result.token)
+//      await action('c_user', result.id)
+//    await action('token', result.token)
+// console.log(result)
 
-router.refresh('/messages')
+// router.refresh('/messages')
 
 
+}else if(result.status === 400){
+    
+    setDisabled(true)
+    setDisabledData(result)
 }
 
 
@@ -128,6 +136,7 @@ router.refresh('/messages')
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
         <ToastContainer position='top-center'/>
+        {disabled && <DisableModal title={disabledData.title} description={disabledData.text} />}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           {/* <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
               <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
@@ -139,8 +148,8 @@ router.refresh('/messages')
                   </h1>
                   <form className="space-y-4 md:space-y-6" action={handleSubmit}>
                       <div>
-                          <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                          <input  type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Email" required=""/>
+                          <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username or email</label>
+                          <input  type="text" name="identifier" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Email" required=""/>
                       </div>
                       <div>
                           <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -159,7 +168,7 @@ router.refresh('/messages')
                       </div>
                       <button type="submit" className="w-full bg-blue-500 text-white hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                          Don’t have an account yet? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                          Don’t have an account yet? <Link href="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
                       </p>
                   </form>
               </div>

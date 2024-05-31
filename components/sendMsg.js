@@ -14,7 +14,7 @@ const SendMsg = ({ params, userID, profile  }) => {
 
   useEffect(() => {
     // Initialize socket connection only once
-    const newSocket = io('ws://192.168.0.118:9000', {
+    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_API, {
       query: { userID: userID, receiverId: params }
     });
 
@@ -51,7 +51,7 @@ const SendMsg = ({ params, userID, profile  }) => {
     <div className='w-[65%]'>
     <div className="mx-2 flex flex-col h-full relative">
       <div className="flex items-center h-28 bg-lightdark pl-4">
-        <Image src={`http://127.0.0.1:8000/${profile.profilePic}`} width={50} height={50} objectFit='cover' className='rounded-full w-[5rem] h-[5rem] object-cover'/>
+        <Image src={`${process.env.NEXT_PUBLIC_API}/${profile.profilePic}`} width={50} height={50} objectFit='cover' className='rounded-full w-[5rem] h-[5rem] object-cover'/>
         <div className='ml-5'>
        
           <h1 className='font-bold text-xl text-white'>{profile.name}</h1>

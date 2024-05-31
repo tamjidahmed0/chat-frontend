@@ -57,13 +57,19 @@ export const AppProvider = ({children}) => {
 
         const initializeSocket = async () => {
             try {
-              const cookie = (await getCookie('c_user')).value;
-              setUser(cookie);
+              const userId = (await getCookie('c_user')).value;
+              const cookie = (await getCookie('token')).value;
+              setUser(userId);
         
               // Initialize socket connection with the user ID
               const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_API, {
-                query: { userID: cookie }  // Use the updated 'user' value here
+                query: { userID: userId, receiverId: '' },
+             auth:{
+              token:cookie
+             },
+          
               });
+              
         
               // Set the socket in the state
               setSocket(newSocket);

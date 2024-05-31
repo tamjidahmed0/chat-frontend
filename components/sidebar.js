@@ -2,28 +2,29 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus, faGear, faComment, faPhone, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, faGear, faComment, faPhone, faBell, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import tamjid from "@/public/tamjid.jpg";
 import remove from "./deleteCookie";
 import { useRouter } from "next/navigation";
 
 
-import GetProfileDetails from "@/lib/getProfileDetails";
-import getCookie from "./getCoockie";
+import getProfileDetails from "@/lib/getProfileDetails";
+import getCookie from "@/components/getCoockie";
 import getMsgRequest from "@/lib/getMsgRequest";
 import { useAppContext } from "@/context/context";
 import getNotification from "@/lib/getNotification";
 import NotificationModal from "./notificationModal";
 
-const Sidebar = (user) => {
+const Sidebar = () => {
   const router = useRouter();
+
+
+
   const { socket, dispatch, state } = useAppContext();
   const [update, setUpdate] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notification, setNotification] = useState({})
-
-  console.log(user.user);
 
   const [isShown, setIsShown] = useState(false);
   const [profile, setProfile] = useState({});
@@ -34,18 +35,28 @@ const Sidebar = (user) => {
   const click = () => {
     Promise.all([remove("c_user"), remove("token")]).then(() => {
       router.refresh("/");
+      if(socket){
+        socket.disconnect()
+      }
     });
   };
 
   useEffect(() => {
     const api = async () => {
-      const profile = await GetProfileDetails(user.user);
+
+      
+  const userId = await getCookie('c_user')
+ 
+      const profile = await getProfileDetails(userId?.value);
+    
       const requestcount = await getMsgRequest();
       const result = await getNotification()
+
+   
         
       setNotification(result)
-      setNotiCount(result.count)
-      setCount(requestcount.count);
+      setNotiCount(result?.count)
+      setCount(requestcount?.count);
       setProfile(profile);
     };
 
@@ -57,11 +68,11 @@ const Sidebar = (user) => {
 
 
 
-  }, [count, update]);
+  }, [count, update ]);
 
   // console.log(profile, 'sidebar')
 
-console.log(notification, 'notification')
+
 
 
   useEffect(() => {
@@ -75,6 +86,11 @@ console.log(notification, 'notification')
         setUpdate(data);
         setCount(data.count);
         console.log(data.count);
+      });
+      socket.on("acceptRefresh", (data) => {
+        setUpdate(data);
+      
+        
       });
 
       // socket.on('requestCount', (data)=>{
@@ -97,7 +113,7 @@ console.log(notification, 'notification')
       <div className=" h-full bg-lightdark ">
         <div className=" pt-5">
           <div className="my-10">
-            <Link href={`http://localhost:3000/messages`} className="">
+            <Link href={`/messages`} className="">
               <div className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faComment} size={"xl"} color="#fff" />
                 <span className="text-[0.9rem] text-[#fff] font-extralight">Chats</span>
@@ -129,11 +145,26 @@ console.log(notification, 'notification')
             </Link>
           </div>
 
+          <div className=" my-10">
+            <Link href={`/messages/connection`}>
+              <div className="flex flex-col items-center relative">
+                {/* {count !== 0 && (
+                  <div className={`absolute bg-red-500 rounded-full h-6 w-6 top-[-1rem] left-3 text-center items-center justify-center flex `}>
+                    <h1 className=" font-semibold text-white text-[12px]">{count}</h1>
+                  </div>
+                )} */}
+
+                <FontAwesomeIcon icon={faUsers} size={"xl"} color="#fff" />
+                <span className="text-[0.9rem] text-[#fff] font-extralight">Connection</span>
+              </div>
+            </Link>
+          </div>
+
           <div className="my-10 relative ">
             <div className="flex flex-col items-center" onClick={handleNotification}>
               {notiCount !== 0 && (
                 <div className={`absolute bg-red-500 rounded-full h-6 w-6 top-[-1rem] left-3 text-center items-center justify-center flex z-10`}>
-                  <h1 className="font-semibold text-white text-[12px]">{notification.count}</h1>
+                  <h1 className="font-semibold text-white text-[12px]">{notification?.count}</h1>
                 </div>
               )}
               <FontAwesomeIcon icon={faBell} size={"xl"} color="#fff" />
@@ -142,8 +173,8 @@ console.log(notification, 'notification')
             {isModalOpen && <NotificationModal notification ={notification} />}
           </div>
 
-          <div className=" mt-[25rem]" onClick={() => setIsShown(true)}>
-            <Link href={"/"}>
+          <div className=" mt-[15rem]" onClick={() => setIsShown(true)}>
+            <Link href={"/settings"}>
               <div className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faGear} size={"xl"} color="#fff" />
                 <span className="text-[0.9rem] text-[#fff] font-extralight">Settings</span>
@@ -154,10 +185,8 @@ console.log(notification, 'notification')
           <div className=" mt-10" onClick={click}>
             <Link href={"/"}>
               <div className="flex flex-col items-center">
-                <Image src={`${process.env.NEXT_PUBLIC_API}/${profile.profilePic}`} width={50} height={50} objectFit="cover" className="rounded-full w-[3rem] h-[3rem] object-cover" />
-
-                {/* <Image src = {`http://127.0.0.1:8000/${params.result.profilePic}`} alt="tamjid" width={50} height={50}   objectFit="cover" className=" rounded-full "/> */}
-                <span className="text-[0.9rem] text-[#fff] font-extralight">profile</span>
+                <Image  src={`${process.env.NEXT_PUBLIC_API}/${profile?.profilePic}`} width={50} height={50} objectFit="cover" className="rounded-full w-[3rem] h-[3rem] object-cover" />
+                <span className="text-[0.9rem] text-[#fff] font-medium">{profile?.name}</span>
               </div>
             </Link>
           </div>

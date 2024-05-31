@@ -3,23 +3,32 @@
 @tailwind utilities;
 
 /* CSS for custom scrollbar */
+/* Track */
 ::-webkit-scrollbar {
-    width: 0; /* Set the width of the scrollbar */
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: #4A5568; /* Set the color of the thumb */
-    border-radius: 6px; /* Set the border radius of the thumb */
-  }
-  
-  ::-webkit-scrollbar-track {
-    background-color: #2F374B; /* Set the color of the track */
-  }
-  
-  /* Optional: Handle when hovering over the scrollbar */
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #718096; /* Change color on hover */
-  }
+  width: 7px; /* width of the scrollbar */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; /* color of the scrollbar handle */
+  border-radius: 6px; /* rounded corners */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* color of the scrollbar handle on hover */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the scrollbar track */
+}
+
+/* Track on hover */
+::-webkit-scrollbar-track:hover {
+  background: #ccc; /* color of the scrollbar track on hover */
+}
+
   
 
   .🤚 {
