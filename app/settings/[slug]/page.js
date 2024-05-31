@@ -13,7 +13,7 @@ import { faCamera} from "@fortawesome/free-solid-svg-icons";
 import Modal from "@/components/modal";
 
 
-const page = ({ params }) => {
+const Page = ({ params }) => {
   const { slug } = params;
 const [result, setResult] = useState({})
 const [update , setUpdate] = useState({})
@@ -197,4 +197,4 @@ const handleFileChange = (event) => {
   }
 };
 
-export default page;
+export default Page;
