@@ -728,10 +728,10 @@ useEffect(()=>{
 
   const peerc = new peers(   {
    
-    host: 'https://peerserver-3ntt.onrender.com',
+    host: 'peerserver-3ntt.onrender.com',
     port:443,
     path: '/myapp',
-    secure: true
+    secure :true
    
   })
 
