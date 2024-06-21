@@ -726,24 +726,40 @@ setLastActive(activeStatus)
 
 useEffect(()=>{
 
-  const peerc = new peers(   {
-   
-    host: 'peerserver-3ntt.onrender.com',
-    port:443,
-    path: '/myapp',
-    secure :true,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' }, // Google's public STUN server
-        {
-          urls: 'turn:numb.viagenie.ca', // Example of a public TURN server
-          username: 'webrtc@live.com', // Example TURN server credentials
-          credential: 'muazkh'
-        }
-      ]
-    }
-   
-  })
+const peerc = new peers({
+  host: 'peerserver-3ntt.onrender.com',
+  port: 443,
+  path: '/myapp',
+  secure: true,
+  config: {'iceServers': [
+
+    {
+      urls: "stun:stun.relay.metered.ca:80",
+    },
+    {
+      urls: "turn:global.relay.metered.ca:80",
+      username: "618c1c06a408cd2318b6ab49",
+      credential: "jHxQkzwVH5pmY/a6",
+    },
+    {
+      urls: "turn:global.relay.metered.ca:80?transport=tcp",
+      username: "618c1c06a408cd2318b6ab49",
+      credential: "jHxQkzwVH5pmY/a6",
+    },
+    {
+      urls: "turn:global.relay.metered.ca:443",
+      username: "618c1c06a408cd2318b6ab49",
+      credential: "jHxQkzwVH5pmY/a6",
+    },
+    {
+      urls: "turns:global.relay.metered.ca:443?transport=tcp",
+      username: "618c1c06a408cd2318b6ab49",
+      credential: "jHxQkzwVH5pmY/a6",
+    },
+
+
+	]}
+});
 
  peerc.on('open', (id)=>{
    setPeerId(id)
