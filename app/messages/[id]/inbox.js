@@ -731,7 +731,17 @@ useEffect(()=>{
     host: 'peerserver-3ntt.onrender.com',
     port:443,
     path: '/myapp',
-    secure :true
+    secure :true,
+    config: {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' }, // Google's public STUN server
+        {
+          urls: 'turn:numb.viagenie.ca', // Example of a public TURN server
+          username: 'webrtc@live.com', // Example TURN server credentials
+          credential: 'muazkh'
+        }
+      ]
+    }
    
   })
 
