@@ -726,7 +726,12 @@ setLastActive(activeStatus)
 
 useEffect(()=>{
 
-  const peerc = new peers()
+  const peerc = new peers(   {
+    urls: [
+      "stun:stun.l.google.com:19302",
+      "stun:global.stun.twilio.com:3478",
+    ],
+  })
 
  peerc.on('open', (id)=>{
    setPeerId(id)
@@ -905,6 +910,21 @@ setIncomingOffer(data.peerOffer)
  },[socket])
 
 
+ useEffect(()=>{
+
+  if(socket){
+
+    socket.on('userDisconnect', (data)=>{
+      console.log(data, 'come from 913')
+    })
+
+
+  }
+
+
+ },[socket])
+
+
 
 
 
@@ -974,7 +994,7 @@ setIncomingOffer(data.peerOffer)
       </div>
 
 
-        {message.map((data, index) => (
+        {message?.map((data, index) => (
           <div key={index} className={`flex mb-1 cursor-pointer mt-16 ${data.whoSend ? "" : "justify-end"}`}>
             <div className="w-24 h-9 rounded-full flex items-center justify-center mr-2">
               <Image src={`${process.env.NEXT_PUBLIC_API}/${data.profile}`} width={50} height={50} objectFit="cover" className={`${data.whoSend ? "" : "hidden"} rounded-full w-[4rem] h-[4rem] object-cover`} />

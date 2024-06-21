@@ -35,9 +35,15 @@ const Login = () => {
 
 // console.log(result)
 
+    const userAgent = navigator.userAgent;
+console.log(userAgent, 'user agent')
+
+
+
+ 
     
          const result = await toastService.promise(
-            getLoginDetails(identifier, password)
+            getLoginDetails(identifier, password, userAgent)
         )
         // const result = await getLoginDetails(email, password)
 
@@ -59,7 +65,7 @@ if(result.status === 401){
     setDisabledData(result)
 }
 
-
+console.log(result, 'result')
    
 // if(result.status === 201){
 

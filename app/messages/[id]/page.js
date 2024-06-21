@@ -22,7 +22,7 @@ try {
   const senderDetails = await getProfileDetails(user)
 
 
-  console.log(messages)
+  console.log(messages, 'messages')
 
 
 
