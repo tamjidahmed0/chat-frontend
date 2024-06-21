@@ -727,10 +727,12 @@ setLastActive(activeStatus)
 useEffect(()=>{
 
   const peerc = new peers(   {
-    urls: [
-      "stun:stun.l.google.com:19302",
-      "stun:global.stun.twilio.com:3478",
-    ],
+   
+    host: 'https://peerserver-3ntt.onrender.com',
+    port:443,
+    path: '/myapp',
+    secure: true
+   
   })
 
  peerc.on('open', (id)=>{
